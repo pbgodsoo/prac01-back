@@ -1,5 +1,7 @@
-package com.example.demo.relation;
+package com.example.demo.relation.service;
 
+import com.example.demo.relation.repository.BRepository;
+import com.example.demo.relation.model.B;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

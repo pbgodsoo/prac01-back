@@ -1,4 +1,4 @@
-package com.example.demo.relation;
+package com.example.demo.relation.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

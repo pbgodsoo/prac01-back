@@ -1,6 +1,7 @@
-package com.example.demo.relation;
+package com.example.demo.relation.controller;
 
 import com.example.demo.common.model.BaseResponse;
+import com.example.demo.relation.service.BService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
