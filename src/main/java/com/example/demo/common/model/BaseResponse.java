@@ -23,6 +23,16 @@ public class BaseResponse<T> {
                 result
         );
     }
+
+    public static <T> BaseResponse fail(BaseResponseStatus status) {
+        return new BaseResponse(
+                status.isSuccess(),
+                status.getCode(),
+                status.getMessage(),
+                null
+        );
+    }
+
     public static <T> BaseResponse fail(BaseResponseStatus status, T result) {
         return new BaseResponse(
                 status.isSuccess(),
