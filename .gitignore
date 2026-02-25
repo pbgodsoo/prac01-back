@@ -38,4 +38,4 @@ out/
 
 gradlew*
 
-application.yml
+.env
