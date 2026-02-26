@@ -15,10 +15,10 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    @PostMapping("/reg")
-    public ResponseEntity register(@RequestBody BoardDto.RegReq dto) {
-        BoardDto.RegRes result = boardService.register(dto);
-        return ResponseEntity.ok(result);
+    @PostMapping("/reg/{userIdx}")
+    public ResponseEntity register(@PathVariable Long userIdx,@RequestBody BoardDto.RegReq dto) {
+        BoardDto.RegRes result = boardService.register(userIdx, dto);
+        return ResponseEntity.ok(BaseResponse.success(result));
     }
 
 
