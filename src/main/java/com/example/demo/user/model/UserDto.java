@@ -27,9 +27,23 @@ public class UserDto {
                 email = providerId + "@kakao.social";
                 properties = (Map) attributes.get("properties");
                 name = (String) properties.get("nickname");
-            } else if(provider.equals("google")){
+            } else if(provider.equals("google")) {
                 email = (String)attributes.get("email");
                 name = (String) attributes.get("name");
+            } else if(provider.equals("naver")) {
+                Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+                providerId = (String) response.get("id");
+                email = (String) response.get("email");
+                name = (String) response.get("name");
+
+                if (email == null || email.isBlank()) {
+                    email = providerId + "@naver.social";
+                }
+                if (name == null || name.isBlank()) {
+                    Object nickname = response.get("nickname");
+                    name = nickname == null ? "naver_user" : String.valueOf(nickname);
+                }
             }
 
             return OAuth.builder()
