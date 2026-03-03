@@ -17,12 +17,20 @@ public class UserDto {
         private String role;
 
         public static OAuth from(Map<String, Object> attributes, String provider) {
-            String providerId = ((Long) attributes.get("id")).toString();
-            System.out.println(providerId);
+            String providerId = null;
+            String email = null;
+            Map properties = null;
+            String name = null;
 
-            String email = providerId + "@kakao.social";
-            Map properties = (Map) attributes.get("properties");
-            String name = (String) properties.get("nickname");
+            if (provider.equals("kakao")) {
+                providerId = ((Long) attributes.get("id")).toString();
+                email = providerId + "@kakao.social";
+                properties = (Map) attributes.get("properties");
+                name = (String) properties.get("nickname");
+            } else if(provider.equals("google")){
+                email = (String)attributes.get("email");
+                name = (String) attributes.get("name");
+            }
 
             return OAuth.builder()
                     .email(email)

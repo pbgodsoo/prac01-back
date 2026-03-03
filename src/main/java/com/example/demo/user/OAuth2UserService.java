@@ -20,11 +20,14 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         System.out.println("서비스 코드 실행");
+        String provider = userRequest
+                .getClientRegistration().getRegistrationId();
+
         // OAuth2 로그인 실행
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         // 내 서비스의 DTO로 변환
-        UserDto.OAuth dto = UserDto.OAuth.from(oAuth2User.getAttributes(), "kakao");
+        UserDto.OAuth dto = UserDto.OAuth.from(oAuth2User.getAttributes(), provider);
 
         // DB에 화면이 있나 없나 확인
         Optional<User> result = userRepository.findByEmail(dto.getEmail());
