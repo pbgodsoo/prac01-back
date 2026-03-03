@@ -3,6 +3,8 @@ package com.example.demo.board;
 import com.example.demo.board.model.Board;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.board.model.BoardDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +21,14 @@ public class BoardService {
         return BoardDto.RegRes.from(entity);
     }
 
-    public List<BoardDto.ListRes> list() {
-        List<Board> boardList = boardRepository.findAll();
-        return boardList.stream().map(BoardDto.ListRes::from).toList();
+    public BoardDto.PageRes list(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        // 페이징 처리 ⭕, 페이지 번호가 필요하다 => Page 반환
+        // 페이징 처리 ⭕, 페이지 번호가 필요없다. => Slice 반환
+        Page<Board> result = boardRepository.findAll(pageRequest);
+
+        return BoardDto.PageRes.from(result);
     }
 
     public BoardDto.ReadRes read(Long idx) {
