@@ -8,6 +8,28 @@ project:
   aes:
     key: aessecretkey01234567890123456789
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    tracing:
+      enabled: false
+#  tracing:
+#    sampling:
+#      probability: 1.0
+
+  otlp:
+    tracing:
+      endpoint: http://172.16.116.130:4318/v1/traces
+
 spring:
   security:
     oauth2:
