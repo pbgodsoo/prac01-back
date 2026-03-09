@@ -1,12 +1,17 @@
 package com.example.demo.chat;
 
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class ChatController {
 
     // WebSocketConfig 클래스에서 설정해둔 /app 뒤에 /test로 메시지를 보내면 해당 메소드를 실행
@@ -20,5 +25,12 @@ public class ChatController {
         System.out.printf("test");
 
         return "zzzz";
+    }
+
+    private final SimpMessagingTemplate messagingTemplate;
+    @MessageMapping("/chat/{roomIdx}")
+    public void sendChatMessage(@DestinationVariable Long roomIdx, String message) {
+        System.out.println("roomIdx : " + roomIdx);
+        messagingTemplate.convertAndSend("/topic/"+roomIdx, message);
     }
 }
