@@ -1,10 +1,12 @@
 package com.example.demo.aop;
 
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +14,28 @@ import java.lang.reflect.Method;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class SimpleAop {
+    private  final Tracer tracer;
+
+    @Around("cut()")
+    public Object traceMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
+
+        Span span = tracer.spanBuilder(className + "." + methodName).startSpan();
+        try (Scope scope = span.makeCurrent()) {
+            span.setAttribute("method.name", methodName);
+
+            return joinPoint.proceed();
+        } catch (Exception e) {
+            span.recordException(e);
+            throw e;
+        } finally {
+            span.end();
+        }
+    }
+
     @Pointcut("execution(* com.example.demo.board..*.*(..))")
     private void cut() {    // 포인트 컷을 적용할 이름을 설정
     }
