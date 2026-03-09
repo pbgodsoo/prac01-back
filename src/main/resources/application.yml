@@ -28,7 +28,7 @@ management:
 
   otlp:
     tracing:
-      endpoint: http://3.39.191.209:4318/v1/traces
+      endpoint: http://172.16.116.130:4318/v1/traces
 
 spring:
   security:
