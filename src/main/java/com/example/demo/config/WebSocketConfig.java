@@ -1,9 +1,11 @@
 package com.example.demo.config;
 
+import com.example.demo.config.interceptor.CheckRoomAuthInterceptor;
 import com.example.demo.config.interceptor.JwtHandshakeInterceptor;
 import com.example.demo.config.websocket.WebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
@@ -13,7 +15,7 @@ import org.springframework.web.socket.config.annotation.*;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final WebSocketHandler webSocketHandler;
     private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
-
+    private final CheckRoomAuthInterceptor checkRoomAuthInterceptor;
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
@@ -23,6 +25,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         //.withSockJS();
 
     }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(checkRoomAuthInterceptor);
+    }
+
 
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topic"); // 구독자가 메시지를 받을 경로의 시작 부분
