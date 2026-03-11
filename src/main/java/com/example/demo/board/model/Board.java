@@ -25,6 +25,8 @@ public class Board extends BaseEntity {
     private String title;
     private String contents;
 
+    private int likesCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_idx")
     private User user;
@@ -39,4 +41,9 @@ public class Board extends BaseEntity {
         this.title = dto.getTitle();
         this.contents = dto.getContents();
     }
+
+    public void increaseLikesCount() {
+        this.likesCount = this.likesCount+1;
+    }
+
 }
