@@ -13,6 +13,16 @@ public class BoardDto {
 
     @Getter
     @Builder
+    @Setter
+    public static class SearchReq {
+        private Long idx;
+        private String title;
+        private String contents;
+        private String writer;
+    }
+
+    @Getter
+    @Builder
     public static class PageRes {
         private List<ListRes> boardList;
         private int totalPage;
